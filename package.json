@@ -8,8 +8,8 @@
   "unpkg": "dist/fastberry.mjs",
   "scripts": {
     "es-build": "esbuild index.js --outfile=dist/tmp.js --bundle --format=esm --target=esnext",
-    "step-one": "echo /* eslint-disable */ > dist/bundle.mjs",
-    "step-two": "cat dist/tmp.js >> dist/bundle.mjs && rm dist/tmp.js",
+    "step-one": "echo /* eslint-disable */ > dist/fastberry.mjs",
+    "step-two": "cat dist/tmp.js >> dist/fastberry.mjs && rm dist/tmp.js",
     "build": "npm run es-build && npm run step-one && npm run step-two"
   },
   "repository": {
