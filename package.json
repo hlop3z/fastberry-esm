@@ -1,0 +1,28 @@
+{
+  "name": "fastberry",
+  "version": "0.1.0",
+  "description": "Fastberry Controller",
+  "main": "index.js",
+  "module": "dist/fastberry.mjs",
+  "jsdelivr": "dist/fastberry.mjs",
+  "unpkg": "dist/fastberry.mjs",
+  "scripts": {
+    "es-build": "esbuild index.js --outfile=dist/tmp.js --bundle --format=esm --target=esnext",
+    "step-one": "echo /* eslint-disable */ > dist/bundle.mjs",
+    "step-two": "cat dist/tmp.js >> dist/bundle.mjs && rm dist/tmp.js",
+    "build": "npm run es-build && npm run step-one && npm run step-two"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hlop3z/fastberry-esm.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hlop3z/fastberry-esm/issues"
+  },
+  "homepage": "https://github.com/hlop3z/fastberry-esm#readme",
+  "devDependencies": {
+    "esbuild": "^0.15.7"
+  }
+}
