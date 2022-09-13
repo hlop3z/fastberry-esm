@@ -7,22 +7,24 @@ export default function Controller({
   types = {},
   forms = [],
   max_depth = 3,
+  ops = {},
 }) {
   const all_types = Types({
     types: types,
     max_depth: max_depth,
   });
   all_types.onError = onError;
+  all_types.pageInfo = PageInfo;
   all_types.edges = (model, max_depth) =>
     Edges({
       manager: all_types,
       model: model,
       max_depth: max_depth,
     });
-  all_types.pageInfo = PageInfo;
   return {
     chain: chain,
     form: Forms(forms),
     type: all_types,
+    ops: ops,
   };
 }
