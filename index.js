@@ -8,7 +8,7 @@ const Headers = (acessToken) => ({
 });
 
 class Fastberry {
-    constructor(chain, types, forms, maxDepth, operations, ignore) {
+    constructor(url, chain, types, forms, maxDepth, operations, ignore) {
         const allForms = Forms(forms);
         const allTypes = Types({
             types: types,
@@ -17,6 +17,7 @@ class Fastberry {
         });
 
         /* DEFINITIONS */
+        this.$url = url;
         this.$api = null;
         this.$chain = chain;
         this.$forms = allForms;
@@ -25,12 +26,13 @@ class Fastberry {
     }
     set api(options) {
         let chain = null;
+        let url = options.url || this.$url;
         if (options.token) {
-            chain = this.$chain(options.url, {
+            chain = this.$chain(url, {
                 headers: Headers(options.token)
             })
         } else {
-            chain = this.$chain(options.url)
+            chain = this.$chain(url)
         }
         this.$api = chain
     }
@@ -55,6 +57,7 @@ class Fastberry {
 }
 
 export default function Controller({
+    url = null,
     chain = null,
     types = {},
     forms = [],
@@ -65,5 +68,5 @@ export default function Controller({
         query: {}
     },
 }) {
-    return new Fastberry(chain, types, forms, maxDepth, operations, ignore);
+    return new Fastberry(url, chain, types, forms, maxDepth, operations, ignore);
 }
