@@ -28,14 +28,16 @@ class APIOps {
   constructor(GQLOps) {
     const query = getInputs(GQLOps["query"]);
     const mutation = getInputs(GQLOps["mutation"]);
-    let allKeys = Object.keys(query);
-    allKeys.push(...Object.keys(mutation));
+    let allKeys = [...query.keys(), ...mutation.keys()];
 
     /* DEFINITIONS */
     this.$ops = GQLOps;
     this.$keys = allKeys;
     this.$query = query;
     this.$mutation = mutation;
+  }
+  get core() {
+    return this.$ops;
   }
   get query() {
     return this.$query;

@@ -49,7 +49,7 @@ console.log(API.form.labels("Pagination", {}, ["all"])); // Ignore: [all].
 // Types
 console.log(API.type.types);
 console.log(API.type.get("Product"));
-console.log(API.type.get("Product", 1, ["category", "group"])); // Ignore: [category, group]
+console.log(GQL.type.get("Product", 2, ["category", "group"])); // Depth-Search: [2] and Ignore: [category, group]
 console.log(API.type.keys("Product"));
 
 // Operations
