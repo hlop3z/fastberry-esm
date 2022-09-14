@@ -53,6 +53,18 @@ console.log(API.type.get("Product", 1, ["category", "group"])); // Ignore: [cate
 console.log(API.type.keys("Product"));
 
 // Operations
-console.log(API.operations.query);
-console.log(API.operations.mutation);
+console.log(API.operations.query.keys());
+console.log(API.operations.mutation.keys());
+```
+
+### Python-Style { Dict }
+
+```js
+const pyDict = GQL.dict({ msg: "hello world" });
+
+console.log(pyDict.keys())
+console.log(pyDict.values())
+console.log(pyDict.items())
+console.log(pyDict.dict())
+console.log(pyDict.dir)
 ```

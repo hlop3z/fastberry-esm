@@ -64,7 +64,12 @@ function generateTypes(api_types) {
 }
 
 function createForm(all_types, formName, ignore = []) {
-  const inputForm = all_types[formName].form;
+  let inputForm = all_types[formName];
+  if (inputForm) {
+    inputForm = inputForm.form
+  } else {
+    inputForm = {}
+  }
   const outForm = {};
   Object.keys(inputForm).forEach((field) => {
     const defaultValue = inputForm[field];

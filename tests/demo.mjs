@@ -25,5 +25,11 @@ console.log(API.type.get("Product", 1, ["category", "group"])); // Ignore: [cate
 console.log(API.type.keys("Product"));
 
 // Operations
-console.log(API.operations.query);
-console.log(API.operations.mutation);
+console.log(API.operations.query.keys());
+console.log(API.operations.mutation.keys());
+
+console.log(API.operations.query.keys())
+console.log(API.operations.query.values())
+console.log(API.operations.query.items())
+console.log(API.operations.query.dict())
+console.log(API.operations.query.dir)

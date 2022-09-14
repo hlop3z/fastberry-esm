@@ -1,6 +1,7 @@
 import Forms from "./src/forms";
 import Types from "./src/types";
 import Operations from "./src/operations";
+import Dict from "./src/pyDict";
 
 const Headers = (acessToken) => ({
     'Content-Type': 'application/json',
@@ -23,6 +24,7 @@ class Fastberry {
         this.$forms = allForms;
         this.$types = allTypes;
         this.$operations = Operations(operations);
+        this.$dict = Dict
     }
     set api(options) {
         let chain = null;
@@ -35,6 +37,9 @@ class Fastberry {
             chain = this.$chain(url)
         }
         this.$api = chain
+    }
+    get dict() {
+        return this.$dict;
     }
     get api() {
         return this.$api;

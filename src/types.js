@@ -27,24 +27,23 @@ function getFields({
   field = {},
   allTypes = {},
   maxDepth = -1,
-  ignore = [],
+  ignore = []
 } = {}) {
   let count = 0;
-  function getFieldsBase(field, reset = null) {
+  function getFieldsBase(field2) {
     let fields = {};
-    Object.keys(field).forEach((key) => {
+    Object.keys(field2).forEach((key) => {
       if (!ignore.includes(key)) {
-        let active = field[key];
+        let active = field2[key];
         if (active === true) {
           fields[key] = true;
         } else {
-          if (count < maxDepth) {
-            count += 1;
+          count += 1;
+          if (count < maxDepth+1) {
             fields[key] = getFieldsBase(allTypes[active]);
-          } else {
-            count = 0;
-          }
+          } 
         }
+        count = 0;
       }
     });
     return fields;

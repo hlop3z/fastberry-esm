@@ -1,6 +1,6 @@
 {
   "name": "fastberry",
-  "version": "0.1.5",
+  "version": "0.1.8",
   "description": "Fastberry Controller",
   "main": "index.js",
   "module": "dist/fastberry.mjs",

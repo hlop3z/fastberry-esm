@@ -1,3 +1,5 @@
+import Dict from "./pyDict"
+ 
 function getInputs(items) {
   const ops = {};
   Object.keys(items).forEach((key) => {
@@ -17,8 +19,9 @@ function getInputs(items) {
       }
       ops[key][field.name] = defaultValue;
     });
+    ops[key] = Dict(ops[key])
   });
-  return ops;
+  return Dict(ops);
 }
 
 class APIOps {

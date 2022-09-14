@@ -63,11 +63,11 @@ test('Type: Get type keys.', () => {
 
 // Operations
 test('Query: List All.', () => {
-  const active = API.operations.query
-  expect(Object.keys(active)).toStrictEqual(['goodAppWarehouseCategory', 'goodAppWarehouseDetail', 'goodAppWarehouseSearch']);
+  const active = API.operations.query.keys()
+  expect(active).toStrictEqual(['goodAppWarehouseCategory', 'goodAppWarehouseDetail', 'goodAppWarehouseSearch']);
 });
 
 test('Mutation: List All.', () => {
-  const active = API.operations.mutation
-  expect(Object.keys(active)).toStrictEqual(['goodAppWarehouseCreateCategory', 'goodAppWarehouseCreateProduct']);
+  const active = API.operations.mutation.keys()
+  expect(active).toStrictEqual(['goodAppWarehouseCreateCategory', 'goodAppWarehouseCreateProduct']);
 });
