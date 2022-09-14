@@ -74,7 +74,7 @@ class APITypes {
     return Object.keys(this.$allTypes);
   }
   keys(name) {
-    const model = getType(name, this.$allTypes, 1);
+    const model = getType(this.$allTypes, name, 1, []);
     return Object.keys(model);
   }
   get(name, maxDepth = 1, ignore = []) {

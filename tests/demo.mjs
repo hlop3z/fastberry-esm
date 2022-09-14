@@ -1,13 +1,13 @@
 import Fastberry from "../dist/fastberry.mjs";
-import Types from "./types.mjs";
-import Forms from "./forms.mjs";
-import Operations from "./operations.mjs";
+import Types from "./backend/types.mjs";
+import Forms from "./backend/forms.mjs";
+import Operations from "./backend/operations.mjs";
 
 const API = Fastberry({
-  types: Types,
-  forms: Forms,
-  operations: Operations,
-  ignore: ["Id"],
+    types: Types,
+    forms: Forms,
+    operations: Operations,
+    ignore: ["Id"],
 });
 
 // Forms
