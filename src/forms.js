@@ -93,6 +93,14 @@ class APIForms {
   get forms() {
     return Object.keys(this.$forms);
   }
+  fields(name) {
+    const active = this.$forms[name]
+    let returnValue = null
+    if (active) {
+      returnValue = active.fields
+    }
+    return returnValue;
+  }
   keys(name) {
     return Object.keys(createForm(this.$forms, name, []));
   }
