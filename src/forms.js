@@ -1,89 +1,116 @@
-function cloneForm(obj = {}, defaults = {}) {
-  let form = { ...obj };
-  let value = null;
-  let fields = Object.keys(form);
-  Object.keys(defaults).forEach((key) => {
-    if (fields.includes(key)) {
-      value = defaults[key];
-    }
-    form[key] = value;
-  });
-  return form;
-}
-function ignoreFields(fields = [], obj = {}, ignore = []) {
-  let form = {};
-  Object.keys(obj).forEach((key) => {
-    if (!ignore.includes(key) && fields.includes(key)) {
-      form[key] = obj[key];
-    }
-  });
-  return form;
-}
-function FormSchema({
-  fields = [],
-  model = {},
-  defaults = {},
-  ignore = [],
-} = {}) {
-  const form = cloneForm(model, defaults);
-  return ignoreFields(fields, form, ignore);
-}
+const DateTime = {
+  date() {
+    var today = new Date();
+    var date =
+      today.getFullYear() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getDate();
+    return date;
+  },
+  time() {
+    var today = new Date();
+    var time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    return time;
+  },
+  datetime() {
+    return new Date();
+  },
+};
 
-class Form {
-  constructor(setup) {
-    this.$core = setup;
-  }
-  get name() {
-    return this.$core.name;
-  }
-  get keys() {
-    return Object.keys(this.$core.form);
-  }
-  get fields() {
-    return this.$core.fields;
-  }
-  get form() {
-    return ({ setup = {}, ignore = [] } = {}) =>
-      this.$blank({ setup: setup, ignore: ignore, base: this.$core.form });
-  }
-  get labels() {
-    return ({ setup = {}, ignore = [] } = {}) =>
-      this.$blank({ setup: setup, ignore: ignore, base: this.$core.labels });
-  }
-  $blank({ setup = {}, ignore = [], base = {} } = {}) {
-    let clientForm = FormSchema({
-      model: base,
-      fields: Object.keys(base),
-      defaults: setup,
-      ignore: ignore,
+function generateTypes(api_types) {
+  const all_types = {};
+  Object.keys(api_types).forEach((key) => {
+    let fields = api_types[key];
+    let form_fields = fields;
+    let form_inputs = {};
+    fields.forEach((field) => {
+      if (field.default) {
+        let defaultValue = field.default;
+        if (field.type === "String") {
+          try {
+            defaultValue = JSON.parse(defaultValue);
+          } catch (e) {
+            defaultValue = defaultValue;
+          }
+        }
+        form_inputs[field.name] = defaultValue;
+      } else if (!field.default && field.list) {
+        let defaultValue = [];
+        form_inputs[field.name] = defaultValue;
+      } else if (!field.default && !field.list) {
+        let time_related = DateTime[field.type.toLowerCase()];
+        if (typeof time_related === "function") {
+          form_inputs[field.name] = () => time_related();
+        } else if (field.type === "JSON") {
+          form_inputs[field.name] = {};
+        } else {
+          let defaultValue = null;
+          form_inputs[field.name] = defaultValue;
+        }
+      } else {
+        let defaultValue = null;
+        form_inputs[field.name] = defaultValue;
+      }
     });
-    return { ...clientForm };
-  }
-}
-
-function FormCreate(json) {
-  const forms = {};
-  json.forEach((item) => {
-    forms[item.name] = new Form(item);
+    all_types[key] = {
+      fields: form_fields,
+      form: form_inputs,
+    };
   });
-  return forms;
+  return all_types;
 }
 
-class Manager {
-  constructor(list) {
-    this.$forms = FormCreate(list);
+function createForm(all_types, formName, ignore = []) {
+  const inputForm = all_types[formName].form;
+  const outForm = {};
+  Object.keys(inputForm).forEach((field) => {
+    const defaultValue = inputForm[field];
+    let value = null;
+    if (typeof defaultValue === "function") {
+      value = defaultValue();
+    } else {
+      value = defaultValue;
+    }
+    if (!ignore.includes(field)) {
+      outForm[field] = value;
+    }
+  });
+  return outForm;
+}
+
+class APIForms {
+  constructor(GQLForms) {
+    this.$forms = generateTypes(GQLForms);
   }
-  get keys() {
+  get forms() {
     return Object.keys(this.$forms);
   }
-  get find() {
-    return this.$forms;
+  keys(name) {
+    return Object.keys(createForm(this.$forms, name, []));
   }
-  get(name) {
-    return this.$forms[name].form();
+  get(name, ignore = []) {
+    return createForm(this.$forms, name, ignore);
+  }
+  labels(name, setup = {}, ignore = []) {
+    const keys = this.keys(name);
+    const labels = {};
+    keys.forEach((key) => {
+      if (!ignore.includes(key)) {
+        let defaultValue = setup[key];
+        let value = key.toUpperCase();
+        if (defaultValue) {
+          value = defaultValue;
+        }
+        labels[key] = value;
+      }
+    });
+    return labels;
   }
 }
-function ManagerCreate(list) {
-  return new Manager(list);
+
+export default function FormManager(GQLForms) {
+  return new APIForms(GQLForms);
 }
-export default ManagerCreate;

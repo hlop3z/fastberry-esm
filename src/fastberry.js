@@ -24,10 +24,10 @@ export const PageInfo = {
 export const Edges = ({
   manager = null,
   model = null,
-  max_depth = null,
+  maxDepth = -1,
 } = {}) => ({
   edges: {
-    node: manager.get(model, max_depth),
+    node: manager.get(model, maxDepth),
     cursor: true,
   },
   pageInfo: PageInfo,
