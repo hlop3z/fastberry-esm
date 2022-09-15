@@ -1,34 +1,34 @@
-import Dict from "./pyDict"
- 
+import Dict from './pyDict';
+
 function getInputs(items) {
   const ops = {};
   Object.keys(items).forEach((key) => {
-    let active = items[key];
+    const active = items[key];
     ops[key] = {};
     active.forEach((field) => {
       let defaultValue = field.default;
       if (!field.scalar) {
         defaultValue = field.type;
       }
-      if (field.type === "String") {
+      if (field.type === 'String') {
         try {
           defaultValue = JSON.parse(defaultValue);
-        } catch (e) {
-          defaultValue = defaultValue;
+        } catch (err) {
+          // pass
         }
       }
       ops[key][field.name] = defaultValue;
     });
-    ops[key] = Dict(ops[key])
+    ops[key] = Dict(ops[key]);
   });
   return Dict(ops);
 }
 
 class APIOps {
   constructor(GQLOps) {
-    const query = getInputs(GQLOps["query"]);
-    const mutation = getInputs(GQLOps["mutation"]);
-    let allKeys = [...query.keys(), ...mutation.keys()];
+    const query = getInputs(GQLOps.query);
+    const mutation = getInputs(GQLOps.mutation);
+    const allKeys = [...query.keys(), ...mutation.keys()];
 
     /* DEFINITIONS */
     this.$ops = GQLOps;
@@ -36,21 +36,27 @@ class APIOps {
     this.$query = query;
     this.$mutation = mutation;
   }
+
   get core() {
     return this.$ops;
   }
+
   get query() {
     return this.$query;
   }
+
   get mutation() {
     return this.$mutation;
   }
+
   get keys() {
     return this.$keys;
   }
+
   get operations() {
     return this.$keys;
   }
+
   get ops() {
     return this.$keys;
   }

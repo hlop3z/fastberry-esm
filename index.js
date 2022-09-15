@@ -9,7 +9,7 @@ const Headers = (acessToken) => ({
 });
 
 class Fastberry {
-    constructor(url, chain, types, forms, maxDepth, operations, ignore) {
+    constructor(url, chain, types, forms, maxDepth, operations, ignore, returnTypes) {
         const allForms = Forms(forms);
         const allTypes = Types({
             types: types,
@@ -24,6 +24,7 @@ class Fastberry {
         this.$forms = allForms;
         this.$types = allTypes;
         this.$operations = Operations(operations);
+        this.$returnTypes = returnTypes;
         this.$dict = Dict
     }
     set api(options) {
@@ -59,6 +60,9 @@ class Fastberry {
     get ops() {
         return this.$operations;
     }
+    get returnType() {
+        return this.$returnTypes;
+    }
 }
 
 export default function Controller({
@@ -72,6 +76,10 @@ export default function Controller({
         mutation: {},
         query: {}
     },
+    returnTypes = {
+        mutation: {},
+        query: {}
+    }
 }) {
-    return new Fastberry(url, chain, types, forms, maxDepth, operations, ignore);
+    return new Fastberry(url, chain, types, forms, maxDepth, operations, ignore, returnTypes);
 }

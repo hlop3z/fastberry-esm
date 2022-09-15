@@ -33,3 +33,5 @@ console.log(API.operations.query.values())
 console.log(API.operations.query.items())
 console.log(API.operations.query.dict())
 console.log(API.operations.query.dir)
+
+console.log(JSON.stringify(API.type.get("Product", 4)));

@@ -13,8 +13,8 @@ const Error = {
 /* ON-ERROR */
 export const onError = Error;
 
-/* Edges (aka: "Pages") 
-  { Connections & PageInfo } 
+/* Edges (aka: "Pages")
+  { Connections & PageInfo }
 */
 export const PageInfo = {
   extra: true,

@@ -1,15 +1,15 @@
-import { onError, Edges, PageInfo } from "./fastberry";
+import { onError, Edges, PageInfo } from './fastberry';
 
-const CORE_TYPES = ["Error", "ErrorMessage", "PageInfo"];
+const CORE_TYPES = ['Error', 'ErrorMessage', 'PageInfo'];
 
 function generateTypes(apiTypes) {
   const allTypes = {};
   Object.keys(apiTypes).forEach((key) => {
-    let fields = apiTypes[key];
-    let setup = {};
+    const fields = apiTypes[key];
+    const setup = {};
     if (
-      !(key.endsWith("Connection") || key.endsWith("Edge")) &&
-      !CORE_TYPES.includes(key)
+      !(key.endsWith('Connection') || key.endsWith('Edge'))
+      && !CORE_TYPES.includes(key)
     ) {
       fields.forEach((field) => {
         if (field.scalar) {
@@ -27,23 +27,23 @@ function getFields({
   field = {},
   allTypes = {},
   maxDepth = -1,
-  ignore = []
+  ignore = [],
 } = {}) {
   let count = 0;
-  function getFieldsBase(field2) {
-    let fields = {};
-    Object.keys(field2).forEach((key) => {
+  function getFieldsBase(item) {
+    const fields = {};
+    Object.keys(item).forEach((key) => {
       if (!ignore.includes(key)) {
-        let active = field2[key];
+        const active = item[key];
         if (active === true) {
           fields[key] = true;
         } else {
           count += 1;
-          if (count < maxDepth+1) {
+          if (count < maxDepth + 1) {
             fields[key] = getFieldsBase(allTypes[active]);
-          } 
+          }
+          count = 0;
         }
-        count = 0;
       }
     });
     return fields;
@@ -52,11 +52,11 @@ function getFields({
 }
 
 function getType(items, name, maxDepth, ignore) {
-  let node = getFields({
+  const node = getFields({
     field: items[name],
-    maxDepth: maxDepth,
+    maxDepth,
     allTypes: items,
-    ignore: ignore,
+    ignore,
   });
   return node;
 }
@@ -69,13 +69,16 @@ class APITypes {
     this.$maxDepth = maxDepth;
     this.$ignore = ignore;
   }
+
   get types() {
     return Object.keys(this.$allTypes);
   }
+
   keys(name) {
     const model = getType(this.$allTypes, name, 1, []);
     return Object.keys(model);
   }
+
   get(name, maxDepth = 1, ignore = []) {
     const allIgnore = [...this.$ignore, ...ignore];
     const depth = maxDepth || this.$maxDepth;
@@ -91,12 +94,11 @@ export default function TypeManager({
   const allTypes = new APITypes(types, maxDepth, ignore);
   /* DEFINITIONS */
   allTypes.onError = onError;
-  allTypes.edges = (model, maxDepth) =>
-    Edges({
-      manager: allTypes,
-      model: model,
-      maxDepth: maxDepth,
-    });
+  allTypes.edges = (type, depth) => Edges({
+    manager: allTypes,
+    model: type,
+    maxDepth: depth,
+  });
   allTypes.pageInfo = PageInfo;
   return allTypes;
 }
