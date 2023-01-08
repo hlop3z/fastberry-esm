@@ -46,7 +46,7 @@ query Search {
 `;
 
 // (GraphQL) Start A Manager
-const graphql = backend.graphql(Query);
+const graphql = backend.graphql(GQLScript);
 
 // Run
 graphql.run("Search").then((response) => {
@@ -61,7 +61,7 @@ graphql.crud("Search").then((response) => {
 // API (Regular)
 graphql.api
   .post("graphql", {
-    query: Query,
+    query: GQLScript,
     operationName: "Search",
   })
   .then((response) => {
