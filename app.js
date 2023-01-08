@@ -1,5 +1,3 @@
 import api from "./src/api";
 
-export default {
-  api,
-};
+export default api;

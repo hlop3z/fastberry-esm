@@ -1,70 +1,70 @@
 # Fastberry (ESM-JavaScript)
 
-<br>
-
-> ### **Fastberry** JavaScript **Controller**
-
-<br>
-
-## Depends on [**Zeus**](https://www.npmjs.com/package/graphql-zeus)
-
-### Install
+## Install
 
 ```sh
-npm i graphql-zeus
+npm i fastberry
 ```
 
-### Build Client
-
-```sh
-zeus schema.graphql ./
-```
-
-## Example
+<br>
 
 ```js
-import Fastberry from 'fastberry';
-import { Chain } from './zeus';
+import fastberry from "fastberry";
 
-import Types from "./types.json";
-import Forms from "./forms.json";
-import Operations from "./operations.json";
+// Start Backend
+const backend = fastberry("http://localhost:8000");
 
-const API = Fastberry({
-    chain: Chain,
-    types: Types,
-    forms: Forms,
-    operations: Operations,
-    ignore: ["Id"],
+// Create A Script
+const GQLScript = `
+fragment PageFields on PageInfo {
+  length
+  pages
+}
+fragment ModelFields on Task {
+  id
+  title
+  description
+  status
+}
+query Detail {
+  detail(item: "MTo6YTU1ZTUzMmVhYjAyOGI0Mg==") {
+    ...ModelFields
+  }
+}
+query Search {
+  search(status: "open") {
+    edges {
+      node {
+        ...ModelFields
+      }
+    }
+    pageInfo {
+      ...PageFields
+    }
+  }
+}
+`;
+
+// (GraphQL) Start A Manager
+const graphql = backend.graphql(Query);
+
+// Run
+graphql.run("Search").then((response) => {
+  console.log(response);
 });
 
-// Forms
-console.log(API.form.forms);
-console.log(API.form.get("FormSearch"));
-console.log(API.form.get("Pagination", ["all"])); // Ignores: [all]
-console.log(API.form.keys("Pagination"));
-console.log(API.form.labels("Pagination", { all: "all" }));
-console.log(API.form.labels("Pagination", {}, ["all"])); // Ignore: [all].
+// CRUD
+graphql.crud("Search").then((response) => {
+  console.log(response);
+});
 
-// Types
-console.log(API.type.types);
-console.log(API.type.get("Product"));
-console.log(GQL.type.get("Product", 2, ["category", "group"])); // Depth-Search: [2] and Ignore: [category, group]
-console.log(API.type.keys("Product"));
-
-// Operations
-console.log(API.operations.query.keys());
-console.log(API.operations.mutation.keys());
-```
-
-### Python-Style { Dict }
-
-```js
-const pyDict = GQL.dict({ msg: "hello world" });
-
-console.log(pyDict.keys())
-console.log(pyDict.values())
-console.log(pyDict.items())
-console.log(pyDict.dict())
-console.log(pyDict.dir)
+// API (Regular)
+graphql.api
+  .post("graphql", {
+    query: Query,
+    operationName: "Search",
+  })
+  .then((response) => {
+    console.log(response);
+  });
 ```
