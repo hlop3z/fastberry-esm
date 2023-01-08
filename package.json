@@ -1,37 +1,26 @@
 {
   "name": "fastberry",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "description": "Fastberry Controller",
-  "main": "index.js",
-  "module": "dist/fastberry.mjs",
-  "jsdelivr": "dist/fastberry.mjs",
-  "unpkg": "dist/fastberry.mjs",
-  "type": "module",
   "scripts": {
-    "es-build": "esbuild index.js --outfile=dist/tmp.js --bundle --format=esm --target=esnext",
-    "step-one": "echo /* eslint-disable */ > dist/fastberry.mjs",
-    "step-two": "cat dist/tmp.js >> dist/fastberry.mjs && rm dist/tmp.js",
-    "build": "npm run es-build && npm run step-one && npm run step-two",
-    "demo": "node tests/demo.mjs",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test-build": "npm run build && npm run test",
-    "lint": "npx eslint src/ --fix"
+    "build": "node build.js"
   },
+  "dependencies": {
+    "esbuild": "0.16.15"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "unpkg": "dist/lib.mjs",
+  "module": "dist/lib.mjs",
+  "jsdelivr": "dist/lib.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hlop3z/fastberry-esm.git"
   },
-  "author": "",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/hlop3z/fastberry-esm/issues"
   },
-  "homepage": "https://github.com/hlop3z/fastberry-esm#readme",
-  "devDependencies": {
-    "esbuild": "^0.15.7",
-    "eslint": "^8.23.1",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "jest": "^29.0.3"
-  }
+  "homepage": "https://github.com/hlop3z/fastberry-esm#readme"
 }
