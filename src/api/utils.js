@@ -31,7 +31,11 @@ class GraphqlScriptCrud {
   constructor(options) {
     this.$script = options.script ? options.script : "";
     this.$api = options.api ? options.api : {};
-    this.op = Object.freeze(QueryToJson(this.$script));
+
+    const scriptItems = QueryToJson(this.$script);
+    scriptItems.$keys = Object.keys(scriptItems);
+
+    this.op = Object.freeze(scriptItems);
   }
   // Core Methods
   get api() {
