@@ -1,3 +1,5 @@
+import QueryToJson from "./parser";
+
 function getNodes(edges) {
   const list = [];
   edges.forEach((item) => {
@@ -27,21 +29,19 @@ function getData(response) {
 
 class GraphqlScriptCrud {
   constructor(options) {
-    this.$script = options.script;
-    this.$api = options.api;
-  }
-  $op(operationName, variables = null) {
-    return this.$api.$crud(this.$script, {
-      operationName: operationName,
-      variables: variables,
-    });
+    this.$script = options.script ? options.script : "";
+    this.$api = options.api ? options.api : {};
+    this.op = Object.freeze(QueryToJson(this.$script));
   }
   // Core Methods
   get api() {
     return this.$api;
   }
-  get crud() {
-    return this.$op;
+  crud(operationName, variables = null) {
+    return this.$api.$crud(this.$script, {
+      operationName: operationName,
+      variables: variables,
+    });
   }
   run(operationName, variables = null) {
     return this.$api.$graphqlBase(this.$script, {
@@ -49,6 +49,10 @@ class GraphqlScriptCrud {
       variables: variables,
     });
   }
+}
+
+export function ScriptGraphQL(options = {}) {
+  return new GraphqlScriptCrud(options);
 }
 
 // GraphQL { CRUD } Script
@@ -64,8 +68,4 @@ export function CRUD(self) {
       });
     });
   };
-}
-
-export function ScriptGraphQL(options = {}) {
-  return new GraphqlScriptCrud(options);
 }

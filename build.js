@@ -1,12 +1,6 @@
-const Watcher = {
-  onRebuild(error, result) {
-    if (error) console.error("watch build failed:", error);
-    else console.log("watch build succeeded:");
-  },
-};
-
-const FILE = "dist/lib.mjs";
 const MINIFY = true;
+const FILE = "dist/lib.mjs";
+
 const BANNER = `
 /*! 
 * Fastberry @ Copyright 2023
@@ -14,6 +8,13 @@ const BANNER = `
 */
 /* eslint-disable */
 `;
+
+const Watcher = {
+  onRebuild(error, result) {
+    if (error) console.error("watch build failed:", error);
+    else console.log("watch build succeeded:");
+  },
+};
 
 require("esbuild")
   .build({
