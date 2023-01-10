@@ -7,6 +7,8 @@ const BANNER = `
 * MIT @ License 
 */
 /* eslint-disable */
+
+import { reactive } from "vue";
 `;
 
 const Watcher = {

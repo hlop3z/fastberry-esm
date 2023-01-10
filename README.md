@@ -1,4 +1,4 @@
-# Fastberry (ESM-JavaScript)
+# Fastberry (**Vue** + Vite)
 
 ## Install
 
@@ -8,14 +8,9 @@ npm i fastberry
 
 <br>
 
-```js
-import fastberry from "fastberry";
+## GraphQL
 
-// Start Backend
-const backend = fastberry("http://localhost:8000");
-
-// Create A Script
-const GQLScript = `
+```graphql
 fragment PageFields on PageInfo {
   length
   pages
@@ -31,8 +26,8 @@ query Detail {
     ...ModelFields
   }
 }
-query Search {
-  search(status: "open") {
+query Search($status: String) {
+  search(status: $status) {
     edges {
       node {
         ...ModelFields
@@ -43,28 +38,51 @@ query Search {
     }
   }
 }
-`;
+```
 
-// (GraphQL) Start A Manager
-const graphql = backend.graphql(GQLScript);
+<br>
 
-// Run
-graphql.run("Search").then((response) => {
-  console.log(response);
+## JavaScript
+
+```js
+/*
+  @ Example With => { Vite }
+*/
+import TaskGQL from "./Task.graphql?raw";
+import fastberry from "./fastberry";
+
+// Start Backend
+const Admin = fastberry();
+
+// (GraphQL) Start Manager
+const graphql = Admin.models({
+  task: TaskGQL,
 });
 
-// CRUD
-graphql.crud("Search").then((response) => {
-  console.log(response);
-});
-
-// API (Regular)
-graphql.api
-  .post("graphql", {
-    query: GQLScript,
-    operationName: "Search",
+// Admin { Search - Operation }
+graphql.task.ops
+  .Search({
+    status: "open",
   })
   .then((response) => {
     console.log(response);
   });
+
+// API Regular (Detail - Operation)
+Admin.api
+  .post("graphql", {
+    query: TaskGQL,
+    operationName: "Detail",
+  })
+  .then((response) => {
+    console.log(response);
+  });
+
+// Get OPERATION { Args }
+console.log("Args");
+console.log(graphql.task.args.Search);
+
+// Get OPERATION { Form } Vue-Reactive
+console.log("Form");
+console.log(graphql.task.form.Search);
 ```

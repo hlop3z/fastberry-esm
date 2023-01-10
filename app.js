@@ -1,3 +1,3 @@
-import api from "./src/api";
+import api from "./src/graphql";
 
 export default api;
