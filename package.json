@@ -1,6 +1,6 @@
 {
   "name": "fastberry",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Fastberry Controller",
   "scripts": {
     "build": "node build.js"
